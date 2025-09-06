@@ -1,0 +1,20 @@
+{
+	"geode": "4.8.0",
+	"gd": {
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074",
+		"ios": "2.2074"
+	},
+	"id": "jai.144hztrial",
+	"name": "Trail Bug Effect",
+	"version": "v1.0.1",
+	"developer": "Jai",
+	"description": "Replica el bug visual de la estela en 144hz",
+    "resources": {
+        "files": [
+            "resources/logo.png"
+        ]
+    },
+    "about": "about.md"
+}
