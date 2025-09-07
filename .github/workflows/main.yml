@@ -1,20 +1,20 @@
-name: Build
+name: Build Geode Mod
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: geode-sdk/build-mod@v1
+      - uses: actions/checkout@v4
+      - uses: geode-sdk/build-geode-mod@main
+        id: build
+      - uses: actions/upload-artifact@v4
         with:
-          version: v1.0.2
-          artifact-name: Trail-Bug-Effect
+          name: TrailBugEffect
+          path: ${{ steps.build.outputs.build-output }}
