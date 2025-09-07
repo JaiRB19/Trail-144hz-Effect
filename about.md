@@ -1,10 +1,13 @@
 # Trail Bug Effect
-Un mod simple que recrea el famoso bug visual de la estela del jugador en monitores de alta frecuencia.
 
-## Características
-* Recrea el efecto visual: El rastro del jugador ahora es intermitente, como en las versiones 2.1 a 144Hz.
+A simple mod that recreates the famous visual trail bug of the player on high refresh rate monitors.
 
-* Facil de usar: Simplemente instala el mod y el efecto estará activado.
+### Features
 
-## Sobre el desarrollador
-Este es mi primer mod creado para aprender a usar Geode. ¡Gracias por la comprension!
+* **Recreates the visual effect:** The player's trail is now intermittent, just like in version 2.1 at 144Hz.
+
+* **Easy to use:** Just install the mod and the effect will be activated.
+
+### About the developer
+
+This is a mod created by Jai to learn how to use Geode. Thank you for the support!

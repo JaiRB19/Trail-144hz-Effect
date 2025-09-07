@@ -1,46 +1,70 @@
-#include <Geode/Geode.hpp>
-#include <Geode/modify/PlayerObject.hpp>
+#include <Geode/modify/CCMotionStreak.hpp>
+#include <Geode/loader/SettingV3.hpp>
 #include <cstdlib>
 #include <ctime>
 
 using namespace geode::prelude;
 
-class $modify(MyPlayer, PlayerObject) {
-public:
-    //variables
+static bool alwaysActive = false;
+
+$on_mod(Loaded) {
+    listenForSettingChanges("always-active", [](bool value) {
+        alwaysActive = value;
+    });
+
+    // inicializar con valor actual
+    alwaysActive = Mod::get()->getSettingValue<bool>("always-active");
+}
+
+class $modify(RandomTrailCutter, CCMotionStreak) {
     struct Fields {
-        int frameSkip = 0;
-        int targetSkip = 0;
-        int jitterOffset = 0;
+        float elapsedTime = 0.f;
+        float targetTime = 0.f;
+        bool isCutting = false;
+        bool seeded = false;
+        bool wasVisible = false;
     };
 
-    void update(float dt) {
-        PlayerObject::update(dt);
+    void update(float delta) {
+        CCMotionStreak::update(delta);
 
-        // Inicializar (una sola vez)
-        static bool seeded = false;
-        if (!seeded) {
+        auto fields = m_fields.self();
+
+        // inicializar random una sola vez
+        if (!fields->seeded) {
             srand(static_cast<unsigned int>(time(nullptr)));
-            seeded = true;
+            fields->seeded = true;
+            fields->targetTime = 0.3f; 
         }
 
-        // target/jitter
-        if (m_fields->targetSkip == 0) {
-            m_fields->targetSkip = 60 + (rand() % 21);  // [60, 80]
-            m_fields->jitterOffset = 1 + (rand() % 5);  // [1, 5]
+        fields->wasVisible = this->isVisible();
+
+        if (!fields->wasVisible && !alwaysActive) {
+            return;
         }
 
-        // jitter incluido
-        if (m_fields->frameSkip % (m_fields->targetSkip + m_fields->jitterOffset) == 0) {
-            if (m_regularTrail) m_regularTrail->update(dt);
-            if (m_shipStreak) m_shipStreak->update(dt);
-            if (m_waveTrail) m_waveTrail->update(dt);
+        // Lógica de corte aleatorio
+        fields->elapsedTime += delta;
+        if (fields->elapsedTime >= fields->targetTime) {
+            fields->elapsedTime = 0.f;
 
-            // Nuevo ciclo con valores aleatorios
-            m_fields->targetSkip = 60 + (rand() % 21);
-            m_fields->jitterOffset = 1 + (rand() % 5);
+            if (fields->isCutting) {
+                this->stopStroke();
+            } else {
+                this->resumeStroke();
+            }
+
+            fields->isCutting = !fields->isCutting;
+
+            // nuevo intervalo aleatorio [0.2s, 0.5s]
+            fields->targetTime = 0.2f + (rand() % 4) * 0.1f;
         }
 
-        m_fields->frameSkip++; //ByJai
+        if (alwaysActive) {
+            this->setVisible(true);
+        }
+        else{
+            this->setVisible(false);
+        }
     }
 };
