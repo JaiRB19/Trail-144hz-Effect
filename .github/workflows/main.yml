@@ -1,59 +1,57 @@
-name: Build Geode Mod
+name: Final Build  # Nombre del workflow que aparecerá en GitHub Actions
 
+# Disparadores del workflow
 on:
-  workflow_dispatch:
+  workflow_dispatch:   # Permite ejecutar manualmente desde GitHub
   push:
     branches:
-      - "**"
+      - "**"         # Se ejecuta en cualquier push a cualquier rama
 
 jobs:
   build:
+    # Estrategia de ejecución con matriz
     strategy:
-      fail-fast: false
+      fail-fast: false   # Si un job falla, no cancela los demás
       matrix:
         config:
-        - name: Windows
+        - name: Windows      # Primer job: Windows
           os: windows-latest
 
-        - name: macOS
-          os: macos-latest
-
-        - name: iOS
-          os: macos-latest
-          target: iOS
-
-        - name: Android32
+        - name: Android32    # Segundo job: Android 32-bit
           os: ubuntu-latest
           target: Android32
 
-        - name: Android64
+        - name: Android64    # Tercer job: Android 64-bit
           os: ubuntu-latest
           target: Android64
 
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+        - name: macOS        # Cuarto job: macOS
+          os: macos-latest
+
+    name: ${{ matrix.config.name }}  # Nombre del job según la matriz
+    runs-on: ${{ matrix.config.os }} # Sistema operativo donde se ejecuta
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4   # Clona el repositorio
 
-      - name: Build the mod
-        uses: geode-sdk/build-geode-mod@main
+      - name: Build mod
+        uses: geode-sdk/build-geode-mod@main  # Acción de Geode para construir el mod
         with:
-          bindings: geode-sdk/bindings
-          bindings-ref: main
-          combine: true
-          target: ${{ matrix.config.target }}
+          bindings: geode-sdk/bindings  # Ruta de las bindings del SDK
+          bindings-ref: main            # Rama de las bindings
+          combine: true                 # Combina los builds en un único paquete
+          target: ${{ matrix.config.target }}  # Target según la matriz (Windows, Android32, etc.)
 
   package:
-    name: Package builds
+    name: Make Package Builds
     runs-on: ubuntu-latest
-    needs: ['build']
+    needs: ['build']   # Este job espera a que termine 'build'
 
     steps:
       - uses: geode-sdk/build-geode-mod/combine@main
-        id: build
+        id: build   # Combina todos los builds generados por el job anterior
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Build Output
-          path: ${{ steps.build.outputs.build-output }}
+          name: Build Output                      # Nombre del artifact
+          path: ${{ steps.build.outputs.build-output }}  # Ruta del build final a subir
