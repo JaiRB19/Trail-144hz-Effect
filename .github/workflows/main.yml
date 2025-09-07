@@ -14,7 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: geode-sdk/build-mod@v1
+      - uses: geode-sdk/actions/build-mod@v1
         with:
-          version: v1.0.2
+          version: v1.2.0
           artifact-name: Trail-Bug-Effect
+
