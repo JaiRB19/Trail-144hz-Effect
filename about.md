@@ -10,4 +10,4 @@ A simple mod that recreates the famous visual trail bug of the player on high re
 
 ### About the developer
 
-This is a mod created by Jai to learn how to use Geode. Thank you for the support!
+This is a mod created to learn how to use Geode. Thank you for the support!
