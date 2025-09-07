@@ -19,6 +19,7 @@
     "about": "about.md",
 	"repository": "https://github.com/JaiRB19/Trail-144hz-Effect",
     "changelog": "changelog.md",
+	"tags": ["gameplay", "customization"],
 
 	"settings": {
     "always-active": {
