@@ -1,0 +1,20 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: geode-sdk/build-mod@v1
+        with:
+          version: v1.0.2
+          artifact-name: Trail-Bug-Effect
